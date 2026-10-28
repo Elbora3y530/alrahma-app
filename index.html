@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شركة الرحمة لتوريد وتصدير البطاطا</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1b4332;
+            --primary-dark: #081c15;
+            --secondary: #d4a373;
+            --accent: #52b788;
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --text-main: #2b2d42;
+            --border: #dee2e6;
+            --danger: #e63946;
+            --success: #2a9d8f;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); direction: rtl; padding-bottom: 40px; }
+        header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white; padding: 20px; text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-bottom: 4px solid var(--secondary);
+        }
+        header h1 { font-size: 26px; margin-bottom: 5px; color: #ffffff; }
+        header p { font-size: 14px; color: var(--secondary); font-weight: 600; }
+        .container { max-width: 1300px; margin: 20px auto; padding: 0 15px; }
+        .nav-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+        .tab-btn {
+            background: #ffffff; border: 2px solid var(--border); padding: 10px 18px; border-radius: 8px;
+            cursor: pointer; font-weight: 700; font-size: 14px; color: var(--text-main); transition: all 0.3s ease;
+        }
+        .tab-btn:hover { border-color: var(--secondary); color: var(--primary); }
+        .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .section-content { display: none; background: var(--card-bg); padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .section-content.active { display: block; }
+        h2 { font-size: 20px; color: var(--primary); margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid var(--secondary); display: flex; align-items: center; gap: 10px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        label { font-size: 13px; font-weight: 700; color: var(--primary-dark); }
+        input, select, textarea { padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; background: #fff; }
+        input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(82,183,136,0.15); }
+        .btn {
+            background: var(--primary); color: white; border: none; padding: 11px 20px; border-radius: 8px;
+            font-weight: 700; cursor: pointer; transition: background 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px;
+        }
+        .btn:hover { background: var(--accent); }
+        .btn-danger { background: var(--danger); }
+        .btn-success { background: var(--success); }
+        .btn-secondary { background: #6c757d; }
+        .btn-warning { background: #f39c12; color: white; }
+        .table-responsive { overflow-x: auto; margin-top: 15px; border-radius: 8px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; text-align: right; font-size: 13px; min-width: 800px; }
+        th, td { padding: 12px 10px; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); }
+        th { background-color: var(--primary); color: white; font-weight: 700; }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .card-stat { background: #ffffff; padding: 18px; border-radius: 10px; border-right: 5px solid var(--secondary); box-shadow: 0 3px 10px rgba(0,0,0,0.05); }
+        .card-stat h4 { font-size: 13px; color: #6c757d; margin-bottom: 8px; }
+        .card-stat .value { font-size: 20px; font-weight: 900; color: var(--primary-dark); }
+        
+        @media print {
+            body * { visibility: hidden !important; }
+            #printArea, #printArea * { visibility: visible !important; }
+            #printArea {
+                position: fixed; left: 0; top: 0; width: 100%; height: 100%;
+                background: white !important; padding: 20px; font-size: 14px; color: #000; display: block !important; z-index: 999999;
+            }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <header class="no-print">
+        <h1>شركة الرحمة لتوريد وتصدير البطاطا</h1>
+        <p><i class="fas fa-phone-alt"></i> تليفون: 01019381124 - 01000108658 | <span id="syncStatus" style="color: #ffd166;">🔄 جاري المزامنة...</span></p>
+    </header>
+    <div class="container">
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs no-print">
+            <button class="tab-btn active" onclick="switchTab('land-section', this)"><i class="fas fa-seedling"></i> حسابات الأراضي</button>
+            <button class="tab-btn" onclick="switchTab('stations-section', this)"><i class="fas fa-truck-loading"></i> محطات التوريد</button>
+            <button class="tab-btn" onclick="switchTab('profits-section', this)"><i class="fas fa-chart-line"></i> صافي أرباح الأرض</button>
+            <button class="tab-btn" onclick="switchTab('financial-section', this)"><i class="fas fa-balance-scale"></i> الموقف المالي</button>
+            <button class="tab-btn" onclick="switchTab('treasury-section', this)"><i class="fas fa-wallet"></i> الخزينة والحركات</button>
+        </div>
+
+        <!-- 1. LAND ACCOUNTS SECTION -->
+        <div id="land-section" class="section-content active">
+            <h2><i class="fas fa-seedling"></i> إدارة حسابات الأراضي والمزارعين</h2>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border);" class="no-print">
+                <h3 style="font-size: 15px; margin-bottom: 10px; color: var(--primary);">إضافة عميل/أرض جديد</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>اسم العميل</label><input type="text" id="clientName" placeholder="أدخل اسم صاحب الأرض"></div>
+                    <div class="form-group"><label>مكان الأرض</label><input type="text" id="clientLocation" placeholder="اسم الحيازة أو المنطقة"></div>
+                    <div class="form-group"><label>نوع التعامل</label>
+                        <select id="clientType"><option value="تحت الشرب">تحت الشرب</option><option value="صادر في البوكسة">صادر في البوكسة</option></select>
+                    </div>
+                    <div class="form-group" style="justify-content: flex-end;"><label>&nbsp;</label><button class="btn" onclick="addClient()"><i class="fas fa-plus"></i> حفظ العميل</button></div>
+                </div>
+            </div>
+            <div class="form-group no-print" style="margin-bottom: 20px;">
+                <label>اختر العميل لعرض الحساب وتسجيل الحركات:</label>
+                <select id="selectActiveClient" onchange="loadClientData()"><option value="">-- اختر العميل --</option></select>
+            </div>
+            <div id="clientOperationsArea" style="display:none;">
+                <div id="clientInfoCard" style="background: #e8f5e9; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-weight: 700; color: var(--primary);"></div>
+                <div style="background: #fdf0d5; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--secondary);" class="no-print">
+                    <h3 id="opFormTitle" style="font-size: 15px; margin-bottom: 10px; color: #b5838d;">تسجيل حركة / مصروف / أوزان</h3>
+                    <input type="hidden" id="editOpId" value="">
+                    <div class="form-grid">
+                        <div class="form-group"><label>التاريخ</label><input type="date" id="opDate"></div>
+                        <div class="form-group"><label>نوع المصروف</label>
+                            <select id="opExpenseType" onchange="checkOtherExpense()">
+                                <option value="بدون">بدون مصروف</option><option value="جراندات">جراندات</option><option value="انفار">انفار</option><option value="فطار">فطار</option><option value="شكاير">شكاير</option><option value="مناديب">مناديب</option><option value="قهوة">قهوة</option><option value="عربيات">عربيات</option><option value="رجالة حمولة">رجالة حمولة</option><option value="أخرى">أخرى</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="otherExpenseDiv" style="display:none;"><label>اكتب المصروف الآخر</label><input type="text" id="opExpenseCustom" placeholder="اكتب اسم المصروف"></div>
+                        <div class="form-group"><label>قيمة المصروف (جنية)</label><input type="number" id="opExpenseVal" value="0"></div>
+                        <div class="form-group"><label>فلوس أخذها صاحب الأرض (سلفة)</label><input type="number" id="opAdvanceVal" value="0"></div>
+                    </div>
+                    <div id="weightsFieldsUnderDrink" class="form-grid" style="margin-top: 10px;">
+                        <div class="form-group"><label>وزن الصادر (كجم)</label><input type="number" id="weightExport" value="0"></div>
+                        <div class="form-group"><label>وزن الفرزة (كجم)</label><input type="number" id="weightSorting" value="0"></div>
+                        <div class="form-group"><label>وزن درجة ثانية (كجم)</label><input type="number" id="weightSecond" value="0"></div>
+                    </div>
+                    <div id="weightsFieldsBox" class="form-grid" style="margin-top: 10px; display:none;">
+                        <div class="form-group"><label>وزن صادر (كجم)</label><input type="number" id="boxWeightRaw" value="0" oninput="calcBoxNet()"></div>
+                        <div class="form-group"><label>نوع الخصم</label><select id="boxDiscountType" onchange="calcBoxNet()"><option value="percent">نسبة (%)</option><option value="kg">بالكيلو ثابت</option></select></div>
+                        <div class="form-group"><label>قيمة الخصم</label><input type="number" id="boxDiscountVal" value="0" oninput="calcBoxNet()"></div>
+                        <div class="form-group"><label>الوزن بعد الخصم</label><input type="number" id="boxWeightNet" readonly style="background: #e9ecef; font-weight: bold;"></div>
+                        <div class="form-group"><label>سعر كيلو البطاطا (لهذه الحركة)</label><input type="number" id="boxPricePerKg" value="0"></div>
+                    </div>
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        <button class="btn btn-success" id="saveOpBtn" onclick="saveOperation()"><i class="fas fa-save"></i> إضافة الحركة للجدول</button>
+                        <button class="btn btn-secondary" id="cancelOpBtn" style="display:none;" onclick="resetOpForm()">إلغاء التعديل</button>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 16px; margin-bottom: 10px;">سجل الحركات والأوزان</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>التاريخ</th><th>المصروف</th><th>القيمة</th><th>سلفة صاحب الأرض</th><th id="thCol1">الأوزان / البيانات</th><th id="thColPrice" style="display:none;">سعر الكيلو</th><th id="thColTotal" style="display:none;">إجمالي الإيراد</th><th class="no-print">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="operationsTableBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- إعدادات تسوية وتصفية العميل بعد جمع الموازين -->
+                <div id="underDrinkCalcCard" style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid var(--success); display:none;">
+                    <h3 style="font-size: 15px; color: var(--primary); margin-bottom: 10px;"><i class="fas fa-calculator"></i> تصفية حساب عميل (تحت الشرب):</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>نسبة الخصم العامة (%)</label>
+                            <input type="number" id="udDiscountPercent" value="0" oninput="calcUnderDrinkFinal()">
+                        </div>
+                        <div class="form-group">
+                            <label>سعر الكيلو (جنية)</label>
+                            <input type="number" id="udPricePerKg" value="0" oninput="calcUnderDrinkFinal()">
+                        </div>
+                    </div>
+                    <div id="udFinalResults" style="font-size: 14px; font-weight: bold; line-height: 1.8;"></div>
+                </div>
+
+                <!-- أزرار طباعة كشف الحساب -->
+                <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;" class="no-print">
+                    <button class="btn btn-secondary" onclick="printClientStatement('summary')"><i class="fas fa-print"></i> طباعة كشف إجمالي (A4)</button>
+                    <button class="btn btn-secondary" onclick="printClientStatement('detailed')"><i class="fas fa-print"></i> طباعة كشف تفصيلي (A4)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. STATIONS SECTION -->
+        <div id="stations-section" class="section-content">
+            <h2><i class="fas fa-truck-loading"></i> محطات التوريد</h2>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border);">
+                <h3 style="font-size: 15px; margin-bottom: 10px; color: var(--primary);">إضافة محطة جديدة</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>اسم المحطة</label><input type="text" id="stationNameInput" placeholder="أدخل اسم المحطة"></div>
+                    <div class="form-group" style="justify-content: flex-end;"><label>&nbsp;</label><button class="btn" onclick="addStation()"><i class="fas fa-plus"></i> حفظ المحطة</button></div>
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>اختر المحطة:</label><select id="selectActiveStation" onchange="loadStationData()"><option value="">-- اختر المحطة --</option></select>
+            </div>
+            <div id="stationOperationsArea" style="display:none;">
+                <div style="background: #fdf0d5; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--secondary);">
+                    <h3 id="stFormTitle" style="font-size: 15px; margin-bottom: 10px; color: #b5838d;">إضافة شحنة للمحطة</h3>
+                    <input type="hidden" id="editStOpId" value="">
+                    <div class="form-grid">
+                        <div class="form-group"><label>التاريخ</label><input type="date" id="stDate"></div>
+                        <div class="form-group"><label>رقم السيارة</label><input type="text" id="stCarNum" placeholder="مثال: أ ب ج 1234"></div>
+                        <div class="form-group"><label>الوزن الخام (كجم)</label><input type="number" id="stRawWeight" value="0" oninput="calcStationNet()"></div>
+                        <div class="form-group"><label>نوع الخصم</label><select id="stDiscountType" onchange="calcStationNet()"><option value="percent">نسبة (%)</option><option value="kg">بالكيلو (كجم)</option></select></div>
+                        <div class="form-group"><label>قيمة الخصم</label><input type="number" id="stDiscountVal" value="0" oninput="calcStationNet()"></div>
+                        <div class="form-group"><label>الوزن بعد الخصم</label><input type="number" id="stNetWeight" readonly style="background: #e9ecef; font-weight: bold;"></div>
+                        <div class="form-group"><label>السعر (للكيلو)</label><input type="number" id="stPrice" value="0"></div>
+                        <div class="form-group"><label>فلوس دفعتها المحطة</label><input type="number" id="stPaidAmount" value="0"></div>
+                    </div>
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        <button class="btn btn-success" id="saveStBtn" onclick="saveStationOperation()"><i class="fas fa-save"></i> تسجيل الشحنة</button>
+                        <button class="btn btn-secondary" id="cancelStBtn" style="display:none;" onclick="resetStForm()">إلغاء التعديل</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>التاريخ</th><th>رقم السيارة</th><th>الوزن الخام</th><th>الوزن بعد الخصم</th><th>السعر</th><th>إجمالي الشحنة</th><th>المدفوع</th><th>الباقي</th><th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stationsTableBody"></tbody>
+                    </table>
+                </div>
+                <div id="stationSummaryBox" style="margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: 8px; font-weight: bold;"></div>
+            </div>
+        </div>
+
+        <!-- 3. NET LAND PROFITS -->
+        <div id="profits-section" class="section-content">
+            <h2><i class="fas fa-chart-line"></i> صافي أرباح وخسائر الأرض</h2>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>اختر الأرض / العميل لحساب الأرباح:</label>
+                <select id="selectProfitClient" onchange="calculateLandProfit()"><option value="">-- اختر العميل --</option></select>
+            </div>
+            <div id="profitResultArea">
+                <p style="color: #6c757d;">الرجاء اختيار العميل لإدخال سعر البيع وعرض تقرير الأرباح.</p>
+            </div>
+        </div>
+
+        <!-- 4. FINANCIAL POSITION -->
+        <div id="financial-section" class="section-content">
+            <h2><i class="fas fa-balance-scale"></i> الموقف المالي الشامل للشركة</h2>
+            <div class="summary-cards">
+                <div class="card-stat"><h4>فلوس لنا بره (لدى المحطات)</h4><div class="value" id="statStationDue" style="color: var(--success);">0 ج.م</div></div>
+                <div class="card-stat"><h4>فلوس علينا بره (للعملاء/الأراضي)</h4><div class="value" id="statClientDue" style="color: var(--danger);">0 ج.م</div></div>
+                <div class="card-stat"><h4>رصيد الخزينة الحالي</h4><div class="value" id="statTreasury" style="color: var(--primary);">0 ج.م</div></div>
+            </div>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-top: 20px;" class="no-print">
+                <h3 style="font-size: 16px; margin-bottom: 10px; color: var(--primary);"><i class="fas fa-shield-alt"></i> حماية وأمان البيانات (Backup)</h3>
+                <p style="font-size: 13px; color: #6c757d; margin-bottom: 15px;">احفظ نسخة احتياطية لبياناتك على اللابتوب أو الآيفون في أي وقت لضمان عدم ضياع أي بيانات.</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-success" onclick="exportDataJSON()"><i class="fas fa-download"></i> تصدير نسخ احتياطي (Backup)</button>
+                    <label class="btn btn-secondary" style="cursor: pointer; margin-bottom: 0;">
+                        <i class="fas fa-upload"></i> استرجاع البيانات <input type="file" id="importFile" style="display: none;" onchange="importDataJSON(event)">
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. TREASURY & MOVEMENTS -->
+        <div id="treasury-section" class="section-content">
+            <h2><i class="fas fa-wallet"></i> الخزينة وحركات الوارد والصرف</h2>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border);">
+                <h3 id="trFormTitle" style="font-size: 15px; margin-bottom: 10px; color: var(--primary);">تسجيل حركة خزينة جديدة</h3>
+                <input type="hidden" id="editTrId" value="">
+                <div class="form-grid">
+                    <div class="form-group"><label>التاريخ</label><input type="date" id="trDate"></div>
+                    <div class="form-group"><label>نوع الحركة</label><select id="trType"><option value="وارد">وارد (دخل للشركة)</option><option value="صرف">صرف (خرج من الشركة)</option></select></div>
+                    <div class="form-group"><label>طريقة الاستلام / الصرف</label><select id="trMethod"><option value="نقدي">نقدي</option><option value="انستاباي">انستاباي (InstaPay)</option><option value="كاش فودافون">محفظة كاش</option></select></div>
+                    <div class="form-group"><label>المبلغ (جنية)</label><input type="number" id="trAmount" value="0"></div>
+                    <div class="form-group"><label>البيان / الوصف</label><input type="text" id="trDesc" placeholder="سبب الوارد أو الصرف"></div>
+                    <div class="form-group" style="justify-content: flex-end;"><label>&nbsp;</label>
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn" id="saveTrBtn" onclick="addTreasuryTx()"><i class="fas fa-plus"></i> تسجيل</button>
+                            <button class="btn btn-secondary" id="cancelTrBtn" style="display:none;" onclick="resetTrForm()">إلغاء</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead><tr><th>التاريخ</th><th>نوع الحركة</th><th>الطريقة</th><th>المبلغ</th><th>البيان</th><th>إجراءات</th></tr></thead>
+                    <tbody id="treasuryTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Printable A4 Area -->
+    <div id="printArea" style="display: none;">
+        <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px;">
+            <h2>شركة الرحمة لتوريد وتصدير البطاطا</h2>
+            <p>تليفون: 01019381124 - 01000108658</p>
+            <h3 id="printTitleReport" style="margin-top: 10px; text-decoration: underline;"></h3>
+        </div>
+        <div id="printBodyContent"></div>
+    </div>
+
+    <script>
+        const BIN_ID = "6724a2efacd3cb34a89db1f2";
+        const API_KEY = "$2a$10$7vYQ1S8m1pYw5Q3v8k0eUe8vVb8Q3v8k0eUe8vVb8Q3v8k0eUe8vVb";
+
+        let db = {
+            clients: [], operations: [], stations: [], stationOps: [], treasury: [], customSellPrices: {}, underDrinkSettings: {}
+        };
+
+        async function syncLoadFromCloud() {
+            try {
+                let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                if(res.ok) {
+                    let json = await res.json();
+                    if(json.record && json.record.clients) {
+                        db = json.record;
+                        saveLocal();
+                        refreshDropdowns();
+                        updateFinancialPosition();
+                        document.getElementById('syncStatus').innerText = "🟢 متصل بالسحابة";
+                    }
+                }
+            } catch(e) {
+                loadLocal();
+                document.getElementById('syncStatus').innerText = "🟡 يعمل محلياً";
+            }
+        }
+
+        async function syncSaveToCloud() {
+            saveLocal();
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                    body: JSON.stringify(db)
+                });
+                document.getElementById('syncStatus').innerText = "🟢 تمت المزمنة سحابياً";
+            } catch(e) {
+                document.getElementById('syncStatus').innerText = "⚠️ حفظ محلي";
+            }
+        }
+
+        function loadLocal() {
+            db.clients = JSON.parse(localStorage.getItem('alrahma_clients')) || [];
+            db.operations = JSON.parse(localStorage.getItem('alrahma_operations')) || [];
+            db.stations = JSON.parse(localStorage.getItem('alrahma_stations')) || [];
+            db.stationOps = JSON.parse(localStorage.getItem('alrahma_stationOps')) || [];
+            db.treasury = JSON.parse(localStorage.getItem('alrahma_treasury')) || [];
+            db.customSellPrices = JSON.parse(localStorage.getItem('alrahma_sellPrices')) || {};
+            db.underDrinkSettings = JSON.parse(localStorage.getItem('alrahma_udSettings')) || {};
+        }
+
+        function saveLocal() {
+            localStorage.setItem('alrahma_clients', JSON.stringify(db.clients));
+            localStorage.setItem('alrahma_operations', JSON.stringify(db.operations));
+            localStorage.setItem('alrahma_stations', JSON.stringify(db.stations));
+            localStorage.setItem('alrahma_stationOps', JSON.stringify(db.stationOps));
+            localStorage.setItem('alrahma_treasury', JSON.stringify(db.treasury));
+            localStorage.setItem('alrahma_sellPrices', JSON.stringify(db.customSellPrices));
+            localStorage.setItem('alrahma_udSettings', JSON.stringify(db.underDrinkSettings));
+        }
+
+        function saveData() {
+            syncSaveToCloud();
+            updateFinancialPosition();
+        }
+
+        function switchTab(sectionId, btnElement) {
+            document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            if(btnElement) btnElement.classList.add('active');
+            if(sectionId === 'financial-section') updateFinancialPosition();
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const today = new Date().toISOString().split('T')[0];
+            if(document.getElementById('opDate')) document.getElementById('opDate').value = today;
+            if(document.getElementById('stDate')) document.getElementById('stDate').value = today;
+            if(document.getElementById('trDate')) document.getElementById('trDate').value = today;
+            
+            loadLocal();
+            refreshDropdowns();
+            syncLoadFromCloud();
+        });
+
+        function refreshDropdowns() {
+            const clientSel = document.getElementById('selectActiveClient');
+            const profitSel = document.getElementById('selectProfitClient');
+            const stationSel = document.getElementById('selectActiveStation');
+            let clientOpts = '<option value="">-- اختر العميل --</option>';
+            db.clients.forEach(c => {
+                clientOpts += `<option value="${c.id}">${c.name} (${c.location} - ${c.type})</option>`;
+            });
+            if(clientSel) clientSel.innerHTML = clientOpts;
+            if(profitSel) profitSel.innerHTML = clientOpts;
+            let stationOpts = '<option value="">-- اختر المحطة --</option>';
+            db.stations.forEach(s => {
+                stationOpts += `<option value="${s.id}">${s.name}</option>`;
+            });
+            if(stationSel) stationSel.innerHTML = stationOpts;
+        }
+
+        function addClient() {
+            const name = document.getElementById('clientName').value.trim();
+            const location = document.getElementById('clientLocation').value.trim();
+            const type = document.getElementById('clientType').value;
+            if(!name) { alert('أدخل اسم العميل من فضلك'); return; }
+            db.clients.push({ id: Date.now(), name, location, type });
+            saveData();
+            refreshDropdowns();
+            document.getElementById('clientName').value = '';
+            document.getElementById('clientLocation').value = '';
+            alert('تم إضافة العميل بنجاح');
+        }
+
+        function loadClientData() {
+            const clientId = document.getElementById('selectActiveClient').value;
+            const area = document.getElementById('clientOperationsArea');
+            if(!clientId) { area.style.display = 'none'; return; }
+            area.style.display = 'block';
+            const client = db.clients.find(c => c.id == clientId);
+            document.getElementById('clientInfoCard').innerHTML = `العميل: ${client.name} | المكان: ${client.location} | نوع التعامل: ${client.type}`;
+            
+            if(client.type === 'تحت الشرب') {
+                document.getElementById('weightsFieldsUnderDrink').style.display = 'grid';
+                document.getElementById('weightsFieldsBox').style.display = 'none';
+                document.getElementById('thCol1').innerText = 'صادر / فرزة / درجة 2';
+                document.getElementById('thColPrice').style.display = 'none';
+                document.getElementById('thColTotal').style.display = 'none';
+                document.getElementById('underDrinkCalcCard').style.display = 'block';
+                
+                let st = db.underDrinkSettings[clientId] || { discount: 0, price: 0 };
+                document.getElementById('udDiscountPercent').value = st.discount;
+                document.getElementById('udPricePerKg').value = st.price;
+                calcUnderDrinkFinal();
+            } else {
+                document.getElementById('weightsFieldsUnderDrink').style.display = 'none';
+                document.getElementById('weightsFieldsBox').style.display = 'grid';
+                document.getElementById('thCol1').innerText = 'وزن صادر / بعد الخصم';
+                document.getElementById('thColPrice').style.display = 'table-cell';
+                document.getElementById('thColTotal').style.display = 'table-cell';
+                document.getElementById('underDrinkCalcCard').style.display = 'none';
+            }
+            renderOperations(clientId);
+            resetOpForm();
+        }
+
+        function checkOtherExpense() {
+            const val = document.getElementById('opExpenseType').value;
+            document.getElementById('otherExpenseDiv').style.display = (val === 'أخرى') ? 'block' : 'none';
+        }
+
+        function calcBoxNet() {
+            const raw = parseFloat(document.getElementById('boxWeightRaw').value) || 0;
+            const dtype = document.getElementById('boxDiscountType').value;
+            const dval = parseFloat(document.getElementById('boxDiscountVal').value) || 0;
+            let net = (dtype === 'percent') ? raw - (raw * (dval / 100)) : raw - dval;
+            document.getElementById('boxWeightNet').value = net > 0 ? net.toFixed(2) : 0;
+        }
+
+        function saveOperation() {
+            const clientId = document.getElementById('selectActiveClient').value;
+            if(!clientId) { alert('اختر العميل أولاً'); return; }
+            const client = db.clients.find(c => c.id == clientId);
+            const date = document.getElementById('opDate').value;
+            let expenseType = document.getElementById('opExpenseType').value;
+            if(expenseType === 'أخرى') expenseType = document.getElementById('opExpenseCustom').value || 'أخرى';
+            const expenseVal = parseFloat(document.getElementById('opExpenseVal').value) || 0;
+            const advanceVal = parseFloat(document.getElementById('opAdvanceVal').value) || 0;
+            
+            let editId = document.getElementById('editOpId').value;
+            let opData = {
+                id: editId ? parseInt(editId) : Date.now(),
+                clientId, date, expenseType, expenseVal, advanceVal
+            };
+
+            if(client.type === 'تحت الشرب') {
+                opData.weightExport = parseFloat(document.getElementById('weightExport').value) || 0;
+                opData.weightSorting = parseFloat(document.getElementById('weightSorting').value) || 0;
+                opData.weightSecond = parseFloat(document.getElementById('weightSecond').value) || 0;
+            } else {
+                opData.boxWeightRaw = parseFloat(document.getElementById('boxWeightRaw').value) || 0;
+                opData.boxDiscountType = document.getElementById('boxDiscountType').value;
+                opData.boxDiscountVal = parseFloat(document.getElementById('boxDiscountVal').value) || 0;
+                opData.boxWeightNet = parseFloat(document.getElementById('boxWeightNet').value) || 0;
+                opData.boxPricePerKg = parseFloat(document.getElementById('boxPricePerKg').value) || 0;
+            }
+
+            if(editId) {
+                let idx = db.operations.findIndex(o => o.id == editId);
+                if(idx !== -1) db.operations[idx] = opData;
+            } else {
+                db.operations.push(opData);
+            }
+
+            saveData();
+            renderOperations(clientId);
+            if(client.type === 'تحت الشرب') calcUnderDrinkFinal();
+            resetOpForm();
+        }
+
+        function renderOperations(clientId) {
+            const tbody = document.getElementById('operationsTableBody');
+            const client = db.clients.find(c => c.id == clientId);
+            const ops = db.operations.filter(o => o.clientId == clientId);
+            let html = '';
+            ops.forEach(o => {
+                let col1Text = (client.type === 'تحت الشرب') ? `صادر: ${o.weightExport} | فرزة: ${o.weightSorting} | ثانية: ${o.weightSecond}` : `خام: ${o.boxWeightRaw} | بعد الخصم: ${o.boxWeightNet}`;
+                let priceText = (client.type === 'صادر في البوكسة') ? `<td>${o.boxPricePerKg} ج.م</td>` : '';
+                let totalText = (client.type === 'صادر في البوكسة') ? `<td><b>${(o.boxWeightNet * (o.boxPricePerKg || 0)).toFixed(2)} ج.م</b></td>` : '';
+                
+                html += `<tr>
+                    <td>${o.date}</td><td>${o.expenseType}</td><td>${o.expenseVal} ج.م</td><td>${o.advanceVal} ج.م</td><td>${col1Text}</td>${priceText}${totalText}
+                    <td class="no-print">
+                        <button class="btn btn-warning" style="padding:4px 8px; font-size:11px;" onclick="editOp(${o.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" style="padding:4px 8px; font-size:11px;" onclick="deleteOp(${o.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function calcUnderDrinkFinal() {
+            const clientId = document.getElementById('selectActiveClient').value;
+            if(!clientId) return;
+            const ops = db.operations.filter(o => o.clientId == clientId);
+            
+            let totalW = 0, totalAdv = 0;
+            ops.forEach(o => {
+                totalW += ((o.weightExport || 0) + (o.weightSorting || 0) + (o.weightSecond || 0));
+                totalAdv += (o.advanceVal || 0);
+            });
+
+            let disc = parseFloat(document.getElementById('udDiscountPercent').value) || 0;
+            let price = parseFloat(document.getElementById('udPricePerKg').value) || 0;
+
+            db.underDrinkSettings[clientId] = { discount: disc, price: price };
+            saveLocal();
+
+            let netWeight = totalW - (totalW * (disc / 100));
+            let totalMoney = netWeight * price;
+            let remainingForOwner = totalMoney - totalAdv;
+
+            document.getElementById('udFinalResults').innerHTML = `
+                <p>إجمالي الموازين الكلية: <b>${totalW} كجم</b> | الوزن بعد نسبة الخصم (${disc}%): <b>${netWeight.toFixed(2)} كجم</b></p>
+                <p>سعر الكيلو: <b>${price} ج.م</b> | إجمالي قيمة البطاطا: <b>${totalMoney.toFixed(2)} ج.م</b></p>
+                <p>إجمالي الفلوس التي استلمها صاحب الأرض: <b>${totalAdv} ج.م</b></p>
+                <hr style="margin:5px 0;">
+                <p style="font-size:16px; color:var(--primary);">الصافي الباقي لصاحب الأرض (بدون خصم المصاريف): <b>${remainingForOwner.toFixed(2)} ج.م</b></p>
+            `;
+        }
+
+        function editOp(id) {
+            const op = db.operations.find(o => o.id == id);
+            if(!op) return;
+            document.getElementById('editOpId').value = op.id;
+            document.getElementById('opDate').value = op.date;
+            document.getElementById('opExpenseType').value = op.expenseType;
+            document.getElementById('opExpenseVal').value = op.expenseVal;
+            document.getElementById('opAdvanceVal').value = op.advanceVal;
+            if(op.weightExport !== undefined) {
+                document.getElementById('weightExport').value = op.weightExport;
+                document.getElementById('weightSorting').value = op.weightSorting;
+                document.getElementById('weightSecond').value = op.weightSecond;
+            } else {
+                document.getElementById('boxWeightRaw').value = op.boxWeightRaw;
+                document.getElementById('boxDiscountType').value = op.boxDiscountType || 'percent';
+                document.getElementById('boxDiscountVal').value = op.boxDiscountVal || 0;
+                document.getElementById('boxWeightNet').value = op.boxWeightNet;
+                document.getElementById('boxPricePerKg').value = op.boxPricePerKg;
+            }
+            document.getElementById('opFormTitle').innerText = "تعديل الحركة / المصروف";
+            document.getElementById('saveOpBtn').innerHTML = '<i class="fas fa-save"></i> تحديث الحركة';
+            document.getElementById('cancelOpBtn').style.display = 'inline-flex';
+            window.scrollTo({top: 200, behavior: 'smooth'});
+        }
+
+        function resetOpForm() {
+            document.getElementById('editOpId').value = '';
+            document.getElementById('opExpenseVal').value = 0;
+            document.getElementById('opAdvanceVal').value = 0;
+            document.getElementById('opFormTitle').innerText = "تسجيل حركة / مصروف / أوزان";
+            document.getElementById('saveOpBtn').innerHTML = '<i class="fas fa-save"></i> إضافة الحركة للجدول';
+            document.getElementById('cancelOpBtn').style.display = 'none';
+        }
+
+        function deleteOp(id) {
+            if(confirm('هل أنت متأكد من حذف هذه الحركة؟')) {
+                db.operations = db.operations.filter(o => o.id != id);
+                saveData();
+                const clientId = document.getElementById('selectActiveClient').value;
+                renderOperations(clientId);
+                const client = db.clients.find(c => c.id == clientId);
+                if(client && client.type === 'تحت الشرب') calcUnderDrinkFinal();
+            }
+        }
+
+        // محطات التوريد
+        function addStation() {
+            const name = document.getElementById('stationNameInput').value.trim();
+            if(!name) { alert('أدخل اسم المحطة'); return; }
+            db.stations.push({ id: Date.now(), name });
+            saveData();
+            refreshDropdowns();
+            document.getElementById('stationNameInput').value = '';
+            alert('تم إضافة المحطة بنجاح');
+        }
+
+        function loadStationData() {
+            const stId = document.getElementById('selectActiveStation').value;
+            const area = document.getElementById('stationOperationsArea');
+            if(!stId) { area.style.display = 'none'; return; }
+            area.style.display = 'block';
+            renderStationOps(stId);
+            resetStForm();
+        }
+
+        function calcStationNet() {
+            const raw = parseFloat(document.getElementById('stRawWeight').value) || 0;
+            const dtype = document.getElementById('stDiscountType').value;
+            const dval = parseFloat(document.getElementById('stDiscountVal').value) || 0;
+            let net = (dtype === 'percent') ? raw - (raw * (dval / 100)) : raw - dval;
+            document.getElementById('stNetWeight').value = net > 0 ? net.toFixed(2) : 0;
+        }
+
+        function saveStationOperation() {
+            const stationId = document.getElementById('selectActiveStation').value;
+            if(!stationId) { alert('اختر المحطة أولاً'); return; }
+            const date = document.getElementById('stDate').value;
+            const carNum = document.getElementById('stCarNum').value.trim();
+            const rawWeight = parseFloat(document.getElementById('stRawWeight').value) || 0;
+            const discountType = document.getElementById('stDiscountType').value;
+            const discountVal = parseFloat(document.getElementById('stDiscountVal').value) || 0;
+            const netWeight = parseFloat(document.getElementById('stNetWeight').value) || 0;
+            const price = parseFloat(document.getElementById('stPrice').value) || 0;
+            const paidAmount = parseFloat(document.getElementById('stPaidAmount').value) || 0;
+            const totalAmount = netWeight * price;
+            const remaining = totalAmount - paidAmount;
+
+            let editId = document.getElementById('editStOpId').value;
+            let stOpData = {
+                id: editId ? parseInt(editId) : Date.now(),
+                stationId, date, carNum, rawWeight, discountType, discountVal, netWeight, price, totalAmount, paidAmount, remaining
+            };
+
+            if(editId) {
+                let idx = db.stationOps.findIndex(o => o.id == editId);
+                if(idx !== -1) db.stationOps[idx] = stOpData;
+            } else {
+                db.stationOps.push(stOpData);
+            }
+
+            saveData();
+            renderStationOps(stationId);
+            resetStForm();
+        }
+
+        function renderStationOps(stationId) {
+            const tbody = document.getElementById('stationsTableBody');
+            const ops = db.stationOps.filter(o => o.stationId == stationId);
+            let html = '';
+            let sumTotal = 0, sumPaid = 0, sumRem = 0;
+            ops.forEach(o => {
+                sumTotal += o.totalAmount; sumPaid += o.paidAmount; sumRem += o.remaining;
+                html += `<tr>
+                    <td>${o.date}</td><td>${o.carNum}</td><td>${o.rawWeight} كجم</td><td>${o.netWeight} كجم</td><td>${o.price} ج.م</td><td>${o.totalAmount.toFixed(2)} ج.م</td><td>${o.paidAmount} ج.م</td><td><b>${o.remaining.toFixed(2)} ج.م</b></td>
+                    <td class="no-print">
+                        <button class="btn btn-warning" style="padding:4px 8px; font-size:11px;" onclick="editStOp(${o.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" style="padding:4px 8px; font-size:11px;" onclick="deleteStationOp(${o.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+            document.getElementById('stationSummaryBox').innerHTML = `إجمالي التوريدات: ${sumTotal.toFixed(2)} ج.م | المدفوع: ${sumPaid} ج.م | الباقي للشركة: <span style="color:var(--danger);">${sumRem.toFixed(2)} ج.م</span>`;
+        }
+
+        function editStOp(id) {
+            const o = db.stationOps.find(item => item.id == id);
+            if(!o) return;
+            document.getElementById('editStOpId').value = o.id;
+            document.getElementById('stDate').value = o.date;
+            document.getElementById('stCarNum').value = o.carNum;
+            document.getElementById('stRawWeight').value = o.rawWeight;
+            document.getElementById('stDiscountType').value = o.discountType || 'percent';
+            document.getElementById('stDiscountVal').value = o.discountVal || 0;
+            document.getElementById('stNetWeight').value = o.netWeight;
+            document.getElementById('stPrice').value = o.price;
+            document.getElementById('stPaidAmount').value = o.paidAmount;
+            document.getElementById('stFormTitle').innerText = "تعديل شحنة المحطة";
+            document.getElementById('saveStBtn').innerHTML = '<i class="fas fa-save"></i> تحديث الشحنة';
+            document.getElementById('cancelStBtn').style.display = 'inline-flex';
+        }
+
+        function resetStForm() {
+            document.getElementById('editStOpId').value = '';
+            document.getElementById('stRawWeight').value = 0;
+            document.getElementById('stNetWeight').value = 0;
+            document.getElementById('stPrice').value = 0;
+            document.getElementById('stPaidAmount').value = 0;
+            document.getElementById('stFormTitle').innerText = "إضافة شحنة للمحطة";
+            document.getElementById('saveStBtn').innerHTML = '<i class="fas fa-save"></i> تسجيل الشحنة';
+            document.getElementById('cancelStBtn').style.display = 'none';
+        }
+
+        function deleteStationOp(id) {
+            if(confirm('هل تريد حذف هذه الشحنة؟')) {
+                db.stationOps = db.stationOps.filter(o => o.id != id);
+                saveData();
+                renderStationOps(document.getElementById('selectActiveStation').value);
+            }
+        }
+
+        // حساب الأرباح وخسائر الأرض
+        function calculateLandProfit() {
+            const clientId = document.getElementById('selectProfitClient').value;
+            const area = document.getElementById('profitResultArea');
+            if(!clientId) { area.innerHTML = '<p>الرجاء اختيار العميل.</p>'; return; }
+            const client = db.clients.find(c => c.id == clientId);
+            const ops = db.operations.filter(o => o.clientId == clientId);
+            let totalExp = 0, totalAdv = 0;
+            ops.forEach(o => { totalExp += o.expenseVal; totalAdv += o.advanceVal; });
+            
+            let currentSellPrice = db.customSellPrices[clientId] || 0;
+
+            area.innerHTML = `
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 2px solid var(--success);">
+                    <h3 style="color: var(--success); margin-bottom: 15px;">تقرير حسابات الأرباح: ${client.name} (${client.location})</h3>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label>أدخل إجمالي سعر بيع الزرع لهذا العميل (ج.م):</label>
+                        <input type="number" id="manualSellPriceInput" value="${currentSellPrice}" oninput="updateSellPrice(${clientId}, this.value)" style="max-width: 300px; font-weight:bold; font-size:16px;">
+                    </div>
+                    <p>إجمالي مصروفات الأرض والعمالة: <b>${totalExp} ج.م</b></p>
+                    <p>إجمالي فلوس/سلف أخذها صاحب الأرض: <b>${totalAdv} ج.م</b></p>
+                    <p>إجمالي المصاريف والمسحوبات معا: <b>${(totalExp + totalAdv)} ج.م</b></p>
+                    <hr style="margin: 10px 0;">
+                    <div id="netProfitDisplay"></div>
+                </div>
+            `;
+            refreshProfitCalc(clientId);
+        }
+
+        function updateSellPrice(clientId, val) {
+            db.customSellPrices[clientId] = parseFloat(val) || 0;
+            saveData();
+            refreshProfitCalc(clientId);
+        }
+
+        function refreshProfitCalc(clientId) {
+            const ops = db.operations.filter(o => o.clientId == clientId);
+            let totalExp = 0, totalAdv = 0;
+            ops.forEach(o => { totalExp += o.expenseVal; totalAdv += o.advanceVal; });
+            let sellPrice = db.customSellPrices[clientId] || 0;
+            let totalOutlays = totalExp + totalAdv;
+            let netProfit = sellPrice - totalOutlays;
+
+            let disp = document.getElementById('netProfitDisplay');
+            if(disp) {
+                disp.innerHTML = `
+                    <p style="font-size: 16px; margin-bottom: 5px;">إجمالي سعر بيع الزرع المحدد: <b>${sellPrice.toFixed(2)} ج.م</b></p>
+                    <p style="font-size: 18px; color: ${netProfit >= 0 ? 'var(--success)' : 'var(--danger)'};">
+                        صافي الربح / الخسارة للأرض: <b>${netProfit.toFixed(2)} ج.م</b> (${netProfit >= 0 ? 'مكسب' : 'خسارة'})
+                    </p>
+                `;
+            }
+        }
+
+        // الخزينة
+        function addTreasuryTx() {
+            const date = document.getElementById('trDate').value;
+            const type = document.getElementById('trType').value;
+            const method = document.getElementById('trMethod').value;
+            const amount = parseFloat(document.getElementById('trAmount').value) || 0;
+            const desc = document.getElementById('trDesc').value.trim();
+            if(!amount) { alert('أدخل المبلغ من فضلك'); return; }
+
+            let editId = document.getElementById('editTrId').value;
+            let trData = {
+                id: editId ? parseInt(editId) : Date.now(),
+                date, type, method, amount, desc
+            };
+
+            if(editId) {
+                let idx = db.treasury.findIndex(t => t.id == editId);
+                if(idx !== -1) db.treasury[idx] = trData;
+            } else {
+                db.treasury.push(trData);
+            }
+
+            saveData();
+            resetTrForm();
+        }
+
+        function renderTreasury() {
+            const tbody = document.getElementById('treasuryTableBody');
+            if(!tbody) return;
+            let html = '';
+            db.treasury.forEach(t => {
+                html += `<tr>
+                    <td>${t.date}</td>
+                    <td style="color:${t.type === 'وارد' ? 'var(--success)' : 'var(--danger)'}; font-weight:bold;">${t.type}</td>
+                    <td>${t.method}</td><td>${t.amount} ج.م</td><td>${t.desc}</td>
+                    <td class="no-print">
+                        <button class="btn btn-warning" style="padding:4px 8px; font-size:11px;" onclick="editTreasury(${t.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" style="padding:4px 8px; font-size:11px;" onclick="deleteTreasury(${t.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function editTreasury(id) {
+            const t = db.treasury.find(item => item.id == id);
+            if(!t) return;
+            document.getElementById('editTrId').value = t.id;
+            document.getElementById('trDate').value = t.date;
+            document.getElementById('trType').value = t.type;
+            document.getElementById('trMethod').value = t.method;
+            document.getElementById('trAmount').value = t.amount;
+            document.getElementById('trDesc').value = t.desc;
+            document.getElementById('trFormTitle').innerText = "تعديل حركة الخزينة";
+            document.getElementById('saveTrBtn').innerHTML = '<i class="fas fa-save"></i> تحديث';
+            document.getElementById('cancelTrBtn').style.display = 'inline-flex';
+        }
+
+        function resetTrForm() {
+            document.getElementById('editTrId').value = '';
+            document.getElementById('trAmount').value = '';
+            document.getElementById('trDesc').value = '';
+            document.getElementById('trFormTitle').innerText = "تسجيل حركة خزينة جديدة";
+            document.getElementById('saveTrBtn').innerHTML = '<i class="fas fa-plus"></i> تسجيل';
+            document.getElementById('cancelTrBtn').style.display = 'none';
+        }
+
+        function deleteTreasury(id) {
+            if(confirm('حذف هذه الحركة؟')) {
+                db.treasury = db.treasury.filter(t => t.id != id);
+                saveData();
+            }
+        }
+
+        function updateFinancialPosition() {
+            let totalStationDue = 0;
+            db.stationOps.forEach(o => totalStationDue += o.remaining);
+            let totalClientDue = 0;
+            db.clients.forEach(client => {
+                const ops = db.operations.filter(o => o.clientId == client.id);
+                let tExp = 0, tAdv = 0;
+                ops.forEach(o => { tExp += o.expenseVal; tAdv += o.advanceVal; });
+                let sellPrice = db.customSellPrices[client.id] || 0;
+                let estRem = sellPrice - tAdv - tExp;
+                if(estRem > 0) totalClientDue += estRem;
+            });
+            let treasuryBalance = 0;
+            db.treasury.forEach(t => {
+                if(t.type === 'وارد') treasuryBalance += t.amount;
+                else treasuryBalance -= t.amount;
+            });
+            if(document.getElementById('statStationDue')) document.getElementById('statStationDue').innerText = totalStationDue.toFixed(2) + ' ج.م';
+            if(document.getElementById('statClientDue')) document.getElementById('statClientDue').innerText = totalClientDue.toFixed(2) + ' ج.م';
+            if(document.getElementById('statTreasury')) document.getElementById('statTreasury').innerText = treasuryBalance.toFixed(2) + ' ج.م';
+            renderTreasury();
+        }
+
+        function exportDataJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", "Alrahma_Backup_" + new Date().toISOString().split('T')[0] + ".json");
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+        }
+
+        function importDataJSON(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if(parsed.clients) {
+                        db = parsed;
+                        saveData();
+                        refreshDropdowns();
+                        alert('تم استرجاع البيانات بنجاح!');
+                    } else { alert('الملف غير صالح.'); }
+                } catch(err) { alert('خطأ في قراءة الملف.'); }
+            };
+            reader.readAsText(file);
+        }
+
+        // طباعة كشف الحساب التفصيلي بجميع بيانات الأوزان المضافة
+        function printClientStatement(mode) {
+            const clientId = document.getElementById('selectActiveClient').value;
+            if(!clientId) { alert('اختر العميل من قسم حسابات الأراضي أولاً'); return; }
+            const client = db.clients.find(c => c.id == clientId);
+            const ops = db.operations.filter(o => o.clientId == clientId);
+            
+            document.getElementById('printTitleReport').innerText = `كشف حساب عميل (${client.name}) - ${client.location} - (${mode === 'summary' ? 'إجمالي' : 'تفصيلي'})`;
+            
+            let content = `<p style="margin-bottom: 10px;"><b>نوع التعامل:</b> ${client.type} | <b>تاريخ الطباعة:</b> ${new Date().toLocaleDateString('ar-EG')}</p>`;
+            
+            if(mode === 'detailed') {
+                content += `<h4>تفاصيل الحركات والمصروفات والأوزان بالكامل:</h4>
+                <table border="1" style="width:100%; border-collapse:collapse; text-align:right; font-size:12px; margin-bottom:15px;">
+                    <thead>
+                        <tr style="background:#1b4332; color:#fff;">
+                            <th>التاريخ</th>
+                            <th>نوع المصروف</th>
+                            <th>المصروف</th>
+                            <th>السلفة</th>
+                            <th>تفاصيل الأوزان</th>
+                            ${client.type === 'صادر في البوكسة' ? '<th>السعر</th><th>إجمالي المبلغ</th>' : ''}
+                        </tr>
+                    </thead>
+                    <tbody>`;
+                ops.forEach(o => {
+                    let weightDetails = (client.type === 'تحت الشرب') 
+                        ? `صادر: ${o.weightExport||0} كجم | فرزة: ${o.weightSorting||0} كجم | درجة2: ${o.weightSecond||0} كجم` 
+                        : `خام: ${o.boxWeightRaw||0} كجم | بعد الخصم: ${o.boxWeightNet||0} كجم`;
+                    
+                    let extraCols = (client.type === 'صادر في البوكسة') 
+                        ? `<td>${o.boxPricePerKg||0} ج.م</td><td>${((o.boxWeightNet||0)*(o.boxPricePerKg||0)).toFixed(2)} ج.م</td>` 
+                        : '';
+
+                    content += `<tr>
+                        <td>${o.date}</td>
+                        <td>${o.expenseType}</td>
+                        <td>${o.expenseVal} ج.م</td>
+                        <td>${o.advanceVal} ج.م</td>
+                        <td>${weightDetails}</td>
+                        ${extraCols}
+                    </tr>`;
+                });
+                content += `</tbody></table>`;
+            }
+
+            let totalExp = 0, totalAdv = 0;
+            ops.forEach(o => { totalExp += o.expenseVal; totalAdv += o.advanceVal; });
+            
+            if(client.type === 'تحت الشرب') {
+                let st = db.underDrinkSettings[clientId] || { discount: 0, price: 0 };
+                let totalW = 0;
+                ops.forEach(o => totalW += ((o.weightExport||0) + (o.weightSorting||0) + (o.weightSecond||0)));
+                let netW = totalW - (totalW * (st.discount / 100));
+                let totalPotato = netW * st.price;
+                let netRem = totalPotato - totalAdv;
+
+                content += `
+                    <div style="background:#f9f9f9; padding:15px; border:1px solid #000; margin-top:10px; border-radius:5px;">
+                        <p>إجمالي الأوزان الكلية: <b>${totalW} كجم</b> | صافي الوزن بعد الخصم (${st.discount}%): <b>${netW.toFixed(2)} كجم</b></p>
+                        <p>سعر الكيلو: <b>${st.price} ج.م</b> | إجمالي قيمة البطاطا: <b>${totalPotato.toFixed(2)} ج.م</b></p>
+                        <p>إجمالي الفلوس التي استلمها صاحب الأرض: <b>${totalAdv} ج.م</b></p>
+                        <hr style="margin: 8px 0;">
+                        <p style="font-size: 16px; color: #1b4332;">صافي الحساب الباقي لصاحب الأرض: <b>${netRem.toFixed(2)} ج.م</b></p>
+                    </div>
+                `;
+            } else {
+                let totalPotatoMoney = 0;
+                ops.forEach(o => totalPotatoMoney += (o.boxWeightNet * (o.boxPricePerKg || 0)));
+                let netRem = totalPotatoMoney - totalExp - totalAdv;
+
+                content += `
+                    <div style="background:#f9f9f9; padding:15px; border:1px solid #000; margin-top:10px; border-radius:5px;">
+                        <p>إجمالي سعر بطاطا الصادر: <b>${totalPotatoMoney.toFixed(2)} ج.م</b></p>
+                        <p>إجمالي المصاريف: <b>${totalExp} ج.م</b> | إجمالي المسحوبات/السلف: <b>${totalAdv} ج.م</b></p>
+                        <hr style="margin: 8px 0;">
+                        <p style="font-size: 16px; color: #1b4332;">صافي الباقي له (الإيراد - المصاريف - المسحوبات): <b>${netRem.toFixed(2)} ج.م</b></p>
+                    </div>
+                `;
+            }
+
+            document.getElementById('printBodyContent').innerHTML = content;
+            document.getElementById('printArea').style.display = 'block';
+            window.print();
+            document.getElementById('printArea').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
